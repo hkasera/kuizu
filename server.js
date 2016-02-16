@@ -2,8 +2,11 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-
-
+var bodyParser = require('body-parser');
+var path    =  require('path');
+var ejs = require('ejs');
+var forEach = require('async-foreach').forEach;
+var Users = require("./app/models/user.js");
 /**
  *  Define the sample application.
  */
@@ -94,6 +97,7 @@ var SampleApp = function() {
      */
     self.createRoutes = function() {
         self.routes = { };
+        self.postroutes = { };
 
         self.routes['/asciimo'] = function(req, res) {
             var link = "http://i.imgur.com/kmbjB.png";
@@ -104,6 +108,44 @@ var SampleApp = function() {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
         };
+
+        self.postroutes['/user'] = function(req, res) {
+            var params = {};
+            params.name = req.body.name;
+            params.dept_id = req.body.dept_id;
+            if(params.name == undefined || params.name.length == 0 || params.dept_id == undefined ||  params.dept_id.length == 0){
+                res.status(500).send({});
+                return;
+            }
+            Users.createUser(params,function(err,docs){
+                if(!err){
+                    res.redirect('/quiz/'+docs._id);
+                }else{
+                    res.render('error.ejs',{code:err.code})
+                }
+            });
+        };
+
+        self.routes['/quiz/:id'] = function(req,res){
+            console.log(req.headers['referer']);
+            var params = {};
+            params.id = req.params.id;
+            res.setHeader('Content-Type', 'text/html');
+            Users.getUserQuestions(params,function(err,docs){
+                if(!err){
+                    res.render('quiz.ejs',{questions:docs,userid:params.id});
+                }else{
+                    res.send(err);
+                }
+            });       
+        }
+
+        self.postroutes['/quiz/:id/submit'] = function(req,res){
+            var params = {};
+            params.id = req.params.id;
+            res.setHeader('Content-Type', 'text/html');
+            res.render('success.ejs');      
+        }
     };
 
 
@@ -113,12 +155,21 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
+
+        self.app.use(bodyParser.json()); // support json encoded bodies
+        self.app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+        
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
         }
+        for (var r in self.postroutes) {
+            self.app.post(r, self.postroutes[r]);
+        }
+        require('./app/apiroutes')(self);
     };
 
 
@@ -139,6 +190,8 @@ var SampleApp = function() {
      *  Start the server (starts up the sample application).
      */
     self.start = function() {
+        self.app.engine('html', ejs.renderFile);
+        self.app.use(express.static(path.join(__dirname, 'public')));
         //  Start the app on the specific interface (and port).
         self.app.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
