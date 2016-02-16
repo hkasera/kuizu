@@ -23,7 +23,8 @@ module.exports = {
 		var answer = db.collection('answer');
 		var rand = Math.random();
 		console.log(rand);
-		db.question.find({_random_sample:{$gte:rand}},
+		//db.question.find({_random_sample:{$gte:rand}},
+			db.question.find({},
 			{
 							"_id" :true,
 							"text":true
