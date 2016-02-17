@@ -20,7 +20,7 @@ module.exports = {
 		})
 	},
 	getUserQuestions : function(params,callback){
-		db.stats.find({_id:params.id},function(err,docs){
+		db.statistics.find({_id:params.id},function(err,docs){
 			if(!err && docs.length === 0){
 				Questions.getQuestionsWithAnswers(params,function(err,docs){
 					callback(err,docs);

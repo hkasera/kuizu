@@ -8,9 +8,18 @@
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 </head>
 <body>
+<header class="page-header teal" style="position:fixed;top:0;width:100%;">
+<div class="container"> 
+        <h3 class="white-text text-lighten-2">General Knowledge Quiz</h3>   
+        </div>         
+        </header>
 	<div class="container"> 
-		<h1>General Knowledge Quiz</h1>    
+		<h1 class="teal-text text-lighten-2">&nbsp;</h1> 
+
       	<form class="col s12" action="/user" method="POST">
+        <div class="row">
+          <blockquote>Please enter your details to begin the quiz</blockquote>
+        </div>
       		<div class="row">
         		<div class="input-field col s12">
          			<input placeholder="Your name" id="name" name="name" type="text" class="validate" required>
@@ -28,7 +37,16 @@
         	</div>
         </form>    	
       </div>
-	
+	 
+   <footer class="page-footer teal" style="position:fixed;bottom:0;width:100%;">
+        
+          <div class="footer-copyright">
+            <div class="container">
+            © 2016 Christ University MBA Finance
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>

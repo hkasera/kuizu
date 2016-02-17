@@ -54,6 +54,22 @@ module.exports = {
 			}
 		})
 	},
+	checkQuestionAnswers : function(params, callback){
+		var answer = db.collection('answer');
+		var res = {};
+		var question_ids = Object.keys(params.questions);;
+		forEach(question_ids,function(question_id,i,question_ids){
+			db.answer.find({_id:ObjectId(params[question_id]),question_id:ObjectId(question_id),is_correct:true}, function(err, docs) {
+            	  if(!err && docs.length != 0){
+            	  		res[question_id]  = true;
+            	  }else{
+            	  		res[question_id]  = false;
+            	  }
+        	});
+		},function(notaborted,res){
+			callback(err,res);
+		});
+	},
 	getQuestionWithAnswers : function(params, callback){
 		var answer = db.collection('answer');
 		var question_id = ObjectId(params.id);

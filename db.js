@@ -12,7 +12,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     connection_string = '127.0.0.1:27017/' + dbName;
 }
 
-var db = mongojs(connection_string, ['user','question','answer','stats']);
+var db = mongojs(connection_string, ['user','question','answer','statistics']);
 
 db.user.createIndex( { dept_id: 1 }, { unique: true } )
 module.exports = db;

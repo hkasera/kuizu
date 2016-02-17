@@ -1,0 +1,27 @@
+<% include partials/header %>
+	<div class="container"> 
+		<h1 class="teal-text text-lighten-2">&nbsp;</h1> 
+
+      	<form class="col s12" action="/user" method="POST">
+        <div class="row">
+          <blockquote>Please enter your details to begin the quiz</blockquote>
+        </div>
+      		<div class="row">
+        		<div class="input-field col s12">
+         			<input placeholder="Your name" id="name" name="name" type="text" class="validate" required>
+          			<label for="name">Name</label>
+        		</div>
+        	</div>
+        	<div class="row">
+        		<div class="input-field col s12">
+         			<input placeholder="Your Registration Number" id="registration_id" name="dept_id" type="text" class="validate" required>
+          			<label for="registration_id">Registration Number</label>
+        		</div>
+        	</div>
+        	<div class="row">
+        		<button class="waves-effect waves-light btn">Submit</button>
+        	</div>
+        </form>    	
+      </div>
+	 
+<% include partials/footer %>

@@ -7,6 +7,8 @@ var path    =  require('path');
 var ejs = require('ejs');
 var forEach = require('async-foreach').forEach;
 var Users = require("./app/models/user.js");
+var Stats = require("./app/models/stats.js");
+var Utils = require("./app/utils.js");
 /**
  *  Define the sample application.
  */
@@ -46,7 +48,7 @@ var SampleApp = function() {
         }
 
         //  Local cache for static content.
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
+        //self.zcache['index.html'] = fs.readFileSync('./index.html');
     };
 
 
@@ -106,7 +108,7 @@ var SampleApp = function() {
 
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
+            res.render('index.ejs');
         };
 
         self.postroutes['/user'] = function(req, res) {
@@ -121,7 +123,8 @@ var SampleApp = function() {
                 if(!err){
                     res.redirect('/quiz/'+docs._id);
                 }else{
-                    res.render('error.ejs',{code:err.code})
+                    console.log(err.code);
+                    res.render('error.ejs',{message:Utils.ERROR_CODE[err.code]})
                 }
             });
         };
@@ -143,8 +146,16 @@ var SampleApp = function() {
         self.postroutes['/quiz/:id/submit'] = function(req,res){
             var params = {};
             params.id = req.params.id;
+            params.questions = req.body;
             res.setHeader('Content-Type', 'text/html');
-            res.render('success.ejs');      
+            Stats.createStats(params,function(err,docs){
+                console.log(err,docs,"--------");
+                if(!err){
+                    res.render('success.ejs',{output:docs});
+                }else{
+                    res.send(err);
+                }
+            });         
         }
     };
 
