@@ -23,12 +23,12 @@ module.exports = {
 		var answer = db.collection('answer');
 		var rand = Math.random();
 		//console.log(rand);
-		db.question.find({_random_sample:{$gte:rand}},
+		db.question.find({},
 			//db.question.find({},
 			{
 							"_id" :true,
 							"text":true
-						}).limit(10).toArray(
+						}).skip(Math.random()*80).limit(10).toArray(
 			function(err,docs){
 			
 			if(!err && docs.length != 0){

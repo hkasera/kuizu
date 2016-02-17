@@ -18,6 +18,6 @@
 header,footer{
 	z-index: 11;
 }
-footer{
+.container{
 	padding-bottom: 50px;
 }
