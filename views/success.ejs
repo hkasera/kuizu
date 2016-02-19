@@ -1,6 +1,15 @@
 <% include partials/header %>
 	<div class="container container-main"> 
- 		<p class="flow-text"><%= output.correct %> answer(s) correct</p>
+ 		<p class="flow-text">
+ 		<%= output.correct %> answer(s) correct
+ 		</p>
+ 		<p class="flow-text">
+ 		<%if (output.correct > 6) { %>
+			Yayee!! You won!
+		<% } else { %>
+ 			Better luck next time!!
+ 		<% } %>
+ 		</p>
   </div>
   <style type="text/css">
 	footer{
